@@ -1,24 +1,27 @@
-import Button from '@/components/Button'
 import { Link, useLocation } from 'react-router-dom'
+import Button from '../Button'
 
-const RecipeCard = () => {
+const RecipeCard = ({ id, title, image, ...rest }) => {
   const { pathname } = useLocation()
   const isDetailPath = /detail/i.test(pathname)
 
   return (
     <div className='bg-cyan-100 w-80 grid place-items-center px-2 py-4 gap-4 shadow shadow-gray-200 rounded'>
-      <h1>Title</h1>
+      <h1>{title}</h1>
       <Link to='#' className=' hover:scale-105 transition-transform'>
-        <img src='https://spoonacular.com/recipeImages/657579-556x370.jpg' alt='image' width='260' />
+        <img src={image} alt={`image ${title}`} width='260' />
       </Link>
-      <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 '>
-        <li>Price: <span className='text-amber-500'>22</span></li>
-        <li>porciones: <span className='text-amber-500'>22</span></li>
-        <li>Time: <span className='text-amber-500'>22</span></li>
-        <li>vegetarian: <span className='text-amber-500'>22</span></li>
-        <li>gluttenfree: <span className='text-amber-500'>22</span></li>
-        <li>healthscore: <span className='text-amber-500'>22</span></li>
-        <li>dairyFree: <span className='text-amber-500'>22</span></li>
+      <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 text-sm'>
+        <li>Price/servings: <span className='text-orange-700'>{rest.pricePerServing}</span></li>
+        <li>Servings: <span className='text-orange-700'>{rest.servings}</span></li>
+        <li>ReadyInMinutes: <span className='text-orange-700'>{rest.readyInMinutes}</span></li>
+        <li>Vegetarian: <span className='text-orange-700'>{rest.vegetarian ? 'yes' : 'no'}</span></li>
+        <li>Gluttenfree: <span className='text-orange-700'>{rest.glutenFree ? 'yes' : 'no'}</span></li>
+        <li>Healthscore: <span className='text-orange-700'>{rest.healthScore}</span></li>
+        <li>DairyFree: <span className='text-orange-700'>{rest.dairyFree ? 'yes' : 'no'}</span></li>
+        {/* {
+          info?.map(({ name, value }) => <li key={name}>{name}: <span className='text-orange-700'>{value}</span></li>)
+        } */}
       </ul>
       {
         !isDetailPath &&

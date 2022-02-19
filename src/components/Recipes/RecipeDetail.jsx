@@ -1,5 +1,5 @@
-import Button from '@/components/Button'
 import { useParams } from 'react-router-dom'
+import Button from '../Button'
 import RecipeCard from './RecipesCard'
 
 const RecipesDetail = () => {

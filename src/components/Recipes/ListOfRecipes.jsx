@@ -1,10 +1,13 @@
 import RecipeCard from './RecipesCard'
 
-const ListOfRecipes = ({ type }) => {
+const ListOfRecipes = ({ type, data }) => {
+  console.log(data)
   return (
-    <section>
+    <section className='grid place-items-center w-full gap-8'>
       <h1>{type}</h1>
-      <RecipeCard />
+      {
+        data?.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
+      }
     </section>
   )
 }

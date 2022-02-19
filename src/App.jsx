@@ -1,4 +1,5 @@
-import Home from '@/components/Home'
+import RecipesDetail from './components/Recipes/RecipeDetail'
+import Home from './components/Home'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 function App () {
@@ -6,6 +7,7 @@ function App () {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/detail/:id' element={<RecipesDetail />} />
       </Routes>
     </BrowserRouter>
   )
