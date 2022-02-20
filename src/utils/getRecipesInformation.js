@@ -19,11 +19,12 @@ export const getRecipesInformation = ({ recipesVegan, recipesRandom }) => {
     return acc
   }, { price: 0, time: 0, health: 0 })
 
-  const totalRecipes = recipesVegan?.length + recipesRandom?.length
+  let totalRecipes = recipesVegan?.length + recipesRandom?.length
+  if (totalRecipes === 0) totalRecipes = 1
 
-  dataResume['Final price'] = infoVegan?.price + infoRandom?.price
-  dataResume['Average preparation time'] = (infoVegan?.time + infoRandom?.time) / totalRecipes
-  dataResume['Average Health Score'] = (infoVegan?.health + infoRandom?.health) / totalRecipes
+  dataResume['Final price'] = (infoVegan?.price + infoRandom?.price).toFixed(2)
+  dataResume['Average preparation time'] = ((infoVegan?.time + infoRandom?.time) / totalRecipes).toFixed(2)
+  dataResume['Average Health Score'] = ((infoVegan?.health + infoRandom?.health) / totalRecipes).toFixed(2)
 
   return { dataResume }
 }

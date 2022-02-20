@@ -1,34 +1,21 @@
-import Header from './Header'
-import ListOfRecipes from './Recipes/ListOfRecipes'
+import { useState } from 'react/cjs/react.development'
 import { useFetch } from '../hooks/useFetch'
 import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
+import Header from './Header'
+import ListOfRecipes from './Recipes/ListOfRecipes'
 import Loader from './Loader'
 import ExtraInformation from './ExtraInformation'
 import { getRecipesInformation } from '../utils/getRecipesInformation'
 
 const Home = () => {
-  // const { recipesVegan, recipesRandom, isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL })
-  const error = null
-  const isLoading = false
-  const recipesRandom = []
-  const recipesVegan = [
-    {
-      id: 1,
-      pricePerServing: 2,
-      servings: 4,
-      readyInMinutes: 10,
-      healthScore: 1
-    },
-    {
-      id: 2,
-      pricePerServing: 4,
-      servings: 8,
-      readyInMinutes: 20,
-      healthScore: 2
-    }
-  ]
+  const [recipesVegan, setRecipesVegan] = useState([])
+  const [recipesRandom, setRecipesRandom] = useState([])
+  const { isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL, setRecipesVegan, setRecipesRandom })
 
   const { dataResume } = getRecipesInformation({ recipesVegan, recipesRandom })
+
+  const deleteRecipeVegan = (id) => setRecipesVegan([...recipesVegan]?.filter(recipe => !(recipe.id === id)))
+  const deleteRecipeRandom = (id) => setRecipesRandom([...recipesRandom]?.filter(recipe => !(recipe.id === id)))
 
   if (error) return <h1>Sorry! data not found</h1>
   if (isLoading) return <Loader />
@@ -38,8 +25,8 @@ const Home = () => {
       <Header />
       <main className='row-span-6 grid grid-cols-5'>
         <div className='col-span-4 grid place-items-center items-start grid-cols-2 p-2 overflow-x-auto'>
-          <ListOfRecipes type='Random' data={recipesRandom} />
-          <ListOfRecipes type='Vegan' data={recipesVegan} />
+          <ListOfRecipes type='Random' data={recipesRandom} handleClick={deleteRecipeRandom} />
+          <ListOfRecipes type='Vegan' data={recipesVegan} handleClick={deleteRecipeVegan} />
         </div>
         <ExtraInformation data={dataResume} />
       </main>
