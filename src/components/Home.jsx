@@ -3,9 +3,32 @@ import ListOfRecipes from './Recipes/ListOfRecipes'
 import { useFetch } from '../hooks/useFetch'
 import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
 import Loader from './Loader'
+import ExtraInformation from './ExtraInformation'
+import { getRecipesInformation } from '../utils/getRecipesInformation'
 
 const Home = () => {
-  const { recipesVegan, recipesRandom, isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL })
+  // const { recipesVegan, recipesRandom, isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL })
+  const error = null
+  const isLoading = false
+  const recipesRandom = []
+  const recipesVegan = [
+    {
+      id: 1,
+      pricePerServing: 2,
+      servings: 4,
+      readyInMinutes: 10,
+      healthScore: 1
+    },
+    {
+      id: 2,
+      pricePerServing: 4,
+      servings: 8,
+      readyInMinutes: 20,
+      healthScore: 2
+    }
+  ]
+
+  const { dataResume } = getRecipesInformation({ recipesVegan, recipesRandom })
 
   if (error) return <h1>Sorry! data not found</h1>
   if (isLoading) return <Loader />
@@ -18,7 +41,7 @@ const Home = () => {
           <ListOfRecipes type='Random' data={recipesRandom} />
           <ListOfRecipes type='Vegan' data={recipesVegan} />
         </div>
-        <aside className='bg-sky-400 grid place-items-center'>Aside</aside>
+        <ExtraInformation data={dataResume} />
       </main>
     </div>
   )

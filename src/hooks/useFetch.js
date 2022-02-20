@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export const useFetch = ({ urlVegan, urlRandom }) => {
-  const [recipesVegan, setRecipesVegan] = useState(null)
-  const [recipesRandom, setRecipesRandom] = useState(null)
+  const [recipesVegan, setRecipesVegan] = useState([])
+  const [recipesRandom, setRecipesRandom] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
