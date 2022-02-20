@@ -1,4 +1,4 @@
-export const getRecipesInformation = ({ recipesVegan, recipesRandom }) => {
+export const getRecipesInformation = ({ recipesVegan = [], recipesRandom = [] }) => {
   const dataResume = {
     'Final price': 0,
     'Average preparation time': 0,

@@ -1,6 +1,6 @@
-import { useState } from 'react/cjs/react.development'
+import { useState } from 'react'
 import { useFetch } from '../hooks/useFetch'
-import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
+import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL, smokRandom, smokVegan } from '../../config'
 import Header from './Header'
 import ListOfRecipes from './Recipes/ListOfRecipes'
 import Loader from './Loader'
@@ -8,14 +8,32 @@ import ExtraInformation from './ExtraInformation'
 import { getRecipesInformation } from '../utils/getRecipesInformation'
 
 const Home = () => {
-  const [recipesVegan, setRecipesVegan] = useState([])
-  const [recipesRandom, setRecipesRandom] = useState([])
-  const { isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL, setRecipesVegan, setRecipesRandom })
+  const [_recipesVegan, setRecipesVegan] = useState(smokVegan)
+  const [_recipesRandom, setRecipesRandom] = useState(smokRandom)
+  const { results: recipesVegan } = _recipesVegan
+  const { recipes: recipesRandom } = _recipesRandom
+  const getInfo = [
+    {
+      url: RECIPES_VEGAN_URL,
+      method: setRecipesVegan
+    },
+    {
+      url: RECIPES_RANDOM_URL,
+      method: setRecipesRandom
+    }
+  ]
 
+  const { isLoading, error } = useFetch({ getInfo })
   const { dataResume } = getRecipesInformation({ recipesVegan, recipesRandom })
 
-  const deleteRecipeVegan = (id) => setRecipesVegan([...recipesVegan]?.filter(recipe => !(recipe.id === id)))
-  const deleteRecipeRandom = (id) => setRecipesRandom([...recipesRandom]?.filter(recipe => !(recipe.id === id)))
+  const deleteRecipeVegan = (id) => {
+    const filterRecipes = [...recipesVegan]?.filter(recipe => !(recipe.id === id))
+    setRecipesVegan({ results: filterRecipes })
+  }
+  const deleteRecipeRandom = (id) => {
+    const filterRecipes = [...recipesRandom]?.filter(recipe => !(recipe.id === id))
+    setRecipesRandom({ recipes: filterRecipes })
+  }
 
   if (error) return <h1>Sorry! data not found</h1>
   if (isLoading) return <Loader />
