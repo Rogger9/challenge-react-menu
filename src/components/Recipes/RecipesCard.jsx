@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import Button from '../Button'
 
-const RecipeCard = ({ id, title, image, ...rest }) => {
+const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
   const { pathname } = useLocation()
   const isDetailPath = /detail/i.test(pathname)
 
@@ -27,7 +27,7 @@ const RecipeCard = ({ id, title, image, ...rest }) => {
         !isDetailPath &&
           <section className='flex justify-between w-full px-8'>
             <Button value='Details' />
-            <Button value='Delete' />
+            <Button value='Delete' handleClick={() => handleClick(id)} />
           </section>
       }
     </div>
