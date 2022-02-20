@@ -8,7 +8,7 @@ const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
   return (
     <div className='bg-cyan-100 w-80 grid place-items-center px-2 py-4 gap-4 shadow shadow-gray-200 rounded'>
       <h1>{title}</h1>
-      <Link to='#' className=' hover:scale-105 transition-transform'>
+      <Link to={`/detail/${id}`} className=' hover:scale-105 transition-transform'>
         <img src={image} alt={`image ${title}`} width='260' />
       </Link>
       <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 text-sm'>
@@ -26,7 +26,7 @@ const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
       {
         !isDetailPath &&
           <section className='flex justify-between w-full px-8'>
-            <Button value='Details' />
+            <Button value='Details' link={`/detail/${id}`} />
             <Button value='Delete' handleClick={() => handleClick(id)} />
           </section>
       }
