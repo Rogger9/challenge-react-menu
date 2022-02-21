@@ -4,6 +4,7 @@ import RecipesDetail from './components/Recipes/RecipeDetail'
 import Home from './components/Home'
 import Login from './components/Login'
 import PriveteRoute from './components/PrivateRoute'
+import Page404 from './components/Page404'
 
 const getInicialState = () => localStorage.getItem('auth')
 
@@ -16,6 +17,7 @@ function App () {
         <Route path='/' element={<PriveteRoute token={auth}><Home /></PriveteRoute>} />
         <Route path='/detail/:id' element={<PriveteRoute token={auth}><RecipesDetail /></PriveteRoute>} />
         <Route path='/login' element={<Login />} />
+        <Route path='*' element={<Page404 />} />
       </Routes>
     </BrowserRouter>
   )
