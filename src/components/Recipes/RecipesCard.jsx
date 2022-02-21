@@ -1,5 +1,6 @@
+import { lazy } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import Button from '../Button'
+const Button = lazy(() => import('../Button'))
 
 const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
   const { pathname } = useLocation()
@@ -9,7 +10,7 @@ const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
     <div className='bg-cyan-100 w-80 grid place-items-center px-2 py-4 gap-4 shadow shadow-gray-200 rounded'>
       <h1>{title}</h1>
       <Link to={`/detail/${id}`} className=' hover:scale-105 transition-transform'>
-        <img src={image} alt={`image ${title}`} width='260' />
+        <img loading='lazy' src={image} alt={`image ${title}`} width='260' />
       </Link>
       <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 text-sm'>
         <li>Price/servings: <span className='text-orange-700'>{rest.pricePerServing}</span></li>

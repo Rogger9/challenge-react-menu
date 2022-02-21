@@ -11,7 +11,7 @@ const RecipesDetail = () => {
   const { id } = useParams()
   const getInfo = [
     {
-      url: RECIPE_INFO(id),
+      url: RECIPE_INFO(id) + import.meta.env.VITE_API_KEY,
       method: setRecipe
     }
   ]

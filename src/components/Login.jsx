@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { validationsLogin } from '../utils/validations'
 import axios from 'axios'
-import { LOGIN_URL } from '../../config'
 
 const AlertMessage = () => (
   <div role='alert' className='grid place-items-center w-screen h-screen absolute text-center font-bold'>
@@ -33,7 +32,7 @@ const Login = () => {
       validate={validationsLogin}
       onSubmit={({ email, password }) => {
         setStatus('processing')
-        axios.post(LOGIN_URL, { email, password })
+        axios.post(import.meta.env.VITE_LOGIN_URL, { email, password })
           .then(({ data: { token } }) => {
             localStorage.setItem('auth', token)
             setStatus('resolved')
@@ -51,7 +50,6 @@ const Login = () => {
               id='email'
               placeholder='correo@correo.com'
               className='w-full px-2 rounded leading-10 outline-none focus:shadow-sm focus:shadow-white'
-              autoFocus
             />
             <ErrorMessage name='email' component={() => <span className='text-red-700'>{errors.email}</span>} />
             <label htmlFor='password' className='w-full'>Password</label>

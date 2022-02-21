@@ -1,7 +1,43 @@
-export const API_KEY = 'b54911f91f424e27a7371e51c7bdb5d3'
+export const RECIPES_VEGAN_URL = 'https://api.spoonacular.com/recipes/complexSearch?diet=vegan&number=2&addRecipeInformation=true&apiKey='
 
-export const RECIPES_VEGAN_URL = `https://api.spoonacular.com/recipes/complexSearch?diet=vegan&number=2&addRecipeInformation=true&apiKey=${API_KEY}`
+export const RECIPES_RANDOM_URL = 'https://api.spoonacular.com/recipes/random?number=2&apiKey='
 
-export const RECIPES_RANDOM_URL = `https://api.spoonacular.com/recipes/random?number=2&apiKey=${API_KEY}`
+export const RECIPE_INFO = (idRecipe) => `https://api.spoonacular.com/recipes/${idRecipe}/information?includeNutrition=true&apiKey=`
 
-export const RECIPE_INFO = (idRecipe) => `https://api.spoonacular.com/recipes/${idRecipe}/information?apiKey=${API_KEY}`
+export const smokVegan = {
+  results: [
+    {
+      id: 1,
+      pricePerServing: 2,
+      servings: 4,
+      readyInMinutes: 10,
+      healthScore: 1
+    },
+    {
+      id: 2,
+      pricePerServing: 4,
+      servings: 8,
+      readyInMinutes: 20,
+      healthScore: 2
+    }
+  ]
+}
+
+export const smokRandom = {
+  recipes: [
+    {
+      id: 3,
+      pricePerServing: 6,
+      servings: 12,
+      readyInMinutes: 10,
+      healthScore: 3
+    },
+    {
+      id: 4,
+      pricePerServing: 8,
+      servings: 16,
+      readyInMinutes: 20,
+      healthScore: 4
+    }
+  ]
+}

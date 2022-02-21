@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import RecipesDetail from './components/Recipes/RecipeDetail'
-import Home from './components/Home'
-import Login from './components/Login'
-import PriveteRoute from './components/PrivateRoute'
-import Page404 from './components/Page404'
+import Loader from './components/Loader'
+
+const Home = lazy(() => import('./components/Home'))
+const RecipesDetail = lazy(() => import('./components/Recipes/RecipeDetail'))
+const Login = lazy(() => import('./components/Login'))
+const PrivateRoute = lazy(() => import('./components/PrivateRoute'))
+const Page404 = lazy(() => import('./components/Page404'))
 
 const getInicialState = () => localStorage.getItem('auth')
 
@@ -13,12 +15,14 @@ function App () {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<PriveteRoute token={auth}><Home /></PriveteRoute>} />
-        <Route path='/detail/:id' element={<PriveteRoute token={auth}><RecipesDetail /></PriveteRoute>} />
-        <Route path='/login' element={<Login />} />
-        <Route path='*' element={<Page404 />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path='/' element={<PrivateRoute token={auth}><Home /></PrivateRoute>} />
+          <Route path='/detail/:id' element={<PrivateRoute token={auth}><RecipesDetail /></PrivateRoute>} />
+          <Route path='/login' element={<Login />} />
+          <Route path='*' element={<Page404 />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
