@@ -23,8 +23,12 @@ const Home = () => {
     }
   ]
 
-  const { isLoading, error } = useFetch({ getInfo })
+  // const { isLoading, error } = useFetch({ getInfo })
   const { dataResume } = getRecipesInformation({ recipesVegan, recipesRandom })
+
+  // const { isLoading, error } = useFetch({ urlVegan: RECIPES_VEGAN_URL, urlRandom: RECIPES_RANDOM_URL, setRecipesVegan, setRecipesRandom })
+  const error = null
+  const isLoading = false
 
   const deleteRecipeVegan = (id) => {
     const filterRecipes = [...recipesVegan]?.filter(recipe => !(recipe.id === id))
@@ -39,10 +43,10 @@ const Home = () => {
   if (isLoading) return <Loader />
 
   return (
-    <div className='bg-cyan-50 grid auto-rows-fr h-screen w-full text-center'>
+    <div className='bg-cyan-50 grid auto-rows-fr min-h-screen h-full w-full text-center'>
       <Header />
-      <main className='row-span-6 grid grid-cols-5'>
-        <div className='col-span-4 grid place-items-center items-start grid-cols-2 p-2 overflow-x-auto'>
+      <main className='row-span-6 grid lg:grid-cols-5'>
+        <div className='col-span-4 grid place-items-center items-start lg:grid-cols-2 sm:p-2 gap-8 overflow-x-auto'>
           <ListOfRecipes type='Random' data={recipesRandom} handleClick={deleteRecipeRandom} />
           <ListOfRecipes type='Vegan' data={recipesVegan} handleClick={deleteRecipeVegan} />
         </div>

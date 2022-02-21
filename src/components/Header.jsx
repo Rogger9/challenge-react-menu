@@ -1,5 +1,5 @@
 const Header = () => (
-  <header className='grid place-items-center'>
+  <header className='bg-cyan-400 flex items-center justify-center w-full shadow-md'>
     Header
   </header>
 )
