@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-export const useFetch = ({ urlVegan, urlRandom, setRecipesVegan, setRecipesRandom, getInfo = [] }) => {
+export const useFetch = ({ getInfo = [] }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 

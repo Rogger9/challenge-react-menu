@@ -5,24 +5,19 @@ const Button = lazy(() => import('../Button'))
 const RecipeCard = ({ id, title, image, handleClick, ...rest }) => {
   const { pathname } = useLocation()
   const isDetailPath = /detail/i.test(pathname)
+  const detailsList = ['pricePerServing', 'servings', 'readyInMinutes', 'vegetarian', 'glutenFree', 'healthScore', 'dairyFree']
+  const detailsToShow = Object.entries(rest).filter(([key]) => detailsList.includes(key))
 
   return (
-    <div className='bg-cyan-100 w-80 grid place-items-center px-2 py-4 gap-4 shadow shadow-gray-200 rounded'>
+    <div className='bg-cyan-100 max-w-lg grid place-items-center px-2 py-4 gap-4 shadow shadow-gray-200 rounded'>
       <h1>{title}</h1>
       <Link to={`/detail/${id}`} className=' hover:scale-105 transition-transform'>
         <img loading='lazy' src={image} alt={`image ${title}`} width='260' />
       </Link>
       <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 text-sm'>
-        <li>Price/servings: <span className='text-orange-700'>{rest.pricePerServing}</span></li>
-        <li>Servings: <span className='text-orange-700'>{rest.servings}</span></li>
-        <li>ReadyInMinutes: <span className='text-orange-700'>{rest.readyInMinutes}</span></li>
-        <li>Vegetarian: <span className='text-orange-700'>{rest.vegetarian ? 'yes' : 'no'}</span></li>
-        <li>Gluttenfree: <span className='text-orange-700'>{rest.glutenFree ? 'yes' : 'no'}</span></li>
-        <li>Healthscore: <span className='text-orange-700'>{rest.healthScore}</span></li>
-        <li>DairyFree: <span className='text-orange-700'>{rest.dairyFree ? 'yes' : 'no'}</span></li>
-        {/* {
-          info?.map(({ name, value }) => <li key={name}>{name}: <span className='text-orange-700'>{value}</span></li>)
-        } */}
+        {
+          detailsToShow.map(([name, value]) => (value || value !== 0) && <li key={name}>{name} <span className='text-orange-700'>{value}</span></li>)
+        }
       </ul>
       {
         !isDetailPath &&
