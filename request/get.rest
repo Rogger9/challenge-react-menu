@@ -1,3 +1,5 @@
 # GET https://api.spoonacular.com/recipes/complexSearch?diet=vegan&number=2&addRecipeInformation=true&apiKey=b54911f91f424e27a7371e51c7bdb5d3
 
-GET https://api.spoonacular.com/recipes/random?number=2&apiKey=b54911f91f424e27a7371e51c7bdb5d3
+# GET https://api.spoonacular.com/recipes/random?number=2&apiKey=b54911f91f424e27a7371e51c7bdb5d3
+
+GET https://api.spoonacular.com/recipes/complexSearch?query=vegan&number=2&addRecipeInformation=true&apiKey=b54911f91f424e27a7371e51c7bdb5d3

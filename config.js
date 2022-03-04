@@ -4,6 +4,8 @@ export const RECIPES_RANDOM_URL = 'https://api.spoonacular.com/recipes/random?nu
 
 export const RECIPE_INFO = (idRecipe) => `https://api.spoonacular.com/recipes/${idRecipe}/information?includeNutrition=true&apiKey=`
 
+export const LOGIN_URL = 'http://challenge-react.alkemy.org'
+
 export const smokVegan = {
   results: [
     {
@@ -18,7 +20,8 @@ export const smokVegan = {
       pricePerServing: 4,
       servings: 8,
       readyInMinutes: 20,
-      healthScore: 2
+      healthScore: 2,
+      vegan: true
     }
   ]
 }
@@ -30,7 +33,8 @@ export const smokRandom = {
       pricePerServing: 6,
       servings: 12,
       readyInMinutes: 10,
-      healthScore: 3
+      healthScore: 3,
+      vegan: true
     },
     {
       id: 4,

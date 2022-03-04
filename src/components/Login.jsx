@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { validationsLogin } from '../utils/validations'
 import axios from 'axios'
+import { LOGIN_URL } from '../../config'
 
 const AlertMessage = () => (
   <div role='alert' className='grid place-items-center w-screen h-screen absolute text-center font-bold'>
@@ -32,7 +33,7 @@ const Login = () => {
       validate={validationsLogin}
       onSubmit={({ email, password }) => {
         setStatus('processing')
-        axios.post(import.meta.env.VITE_LOGIN_URL, { email, password })
+        axios.post(LOGIN_URL, { email, password })
           .then(({ data: { token } }) => {
             localStorage.setItem('auth', token)
             setStatus('resolved')
