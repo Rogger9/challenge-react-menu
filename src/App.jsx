@@ -1,6 +1,7 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Loader from './components/Loader'
+import { useAuth } from './hooks/useAuth'
 
 const Home = lazy(() => import('./components/Home'))
 const RecipesDetail = lazy(() => import('./components/Recipes/RecipeDetail'))
@@ -8,10 +9,8 @@ const Login = lazy(() => import('./components/Login'))
 const PrivateRoute = lazy(() => import('./components/PrivateRoute'))
 const Page404 = lazy(() => import('./components/Page404'))
 
-const getInicialState = () => localStorage.getItem('auth')
-
 function App () {
-  const [auth] = useState(getInicialState)
+  const { auth } = useAuth()
 
   return (
     <BrowserRouter>
