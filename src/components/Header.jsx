@@ -1,21 +1,14 @@
 import { lazy, useEffect, useState } from 'react'
 import Search from './Search'
 import axios from 'axios'
+import { useMessage } from '../hooks/useMessage'
 
 const Loader = lazy(() => import('./Loader'))
 const ListOfRecipes = lazy(() => import('./Recipes/ListOfRecipes'))
 const Button = lazy(() => import('./Button'))
+const AlertMessage = lazy(() => import('./AlertMessage'))
 
 const MAX_RECIPES = 2
-
-const AlertMessage = () => (
-  <div role='alert' className='grid place-items-center w-screen h-screen absolute text-center font-bold'>
-    <section className='bg-red-500/90 grid place-items-center p-2 w-3/4 h-1/5 rounded'>
-      <h1 className=''>Error!</h1>
-      <p>Sorry! Search failed. Please try again later</p>
-    </section>
-  </div>
-)
 
 const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }) => {
   const [query, setQuery] = useState(null)
@@ -26,6 +19,14 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
   const numbersQuery = 4
   const maxVegan = veganAmount === MAX_RECIPES
   const maxRandom = randomAmount === MAX_RECIPES
+  const messagesError = {
+    rejected: 'Sorry! Search failed. Please try again later',
+    alert1: 'The menu is already complete',
+    alert2: 'The vegan menu already has 2 recipes',
+    alert3: 'The random menu already has 2 recipes'
+  }
+
+  useMessage({ status, setStatus })
 
   const URL_SEARCH = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=${numbersQuery}&offset=${page}&addRecipeInformation=true&apiKey=` + import.meta.env.VITE_API_KEY
 
@@ -40,11 +41,6 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
       .catch(() => setStatus('rejected'))
   }, [query, page])
 
-  useEffect(() => {
-    const timeOut = setTimeout(() => status === 'rejected' && setStatus('idle'), 4000)
-    return () => clearTimeout(timeOut)
-  }, [status])
-
   const closeSearch = () => {
     setQuery(null)
     setPage(0)
@@ -55,9 +51,9 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
   const handlePage = () => setPage(offset + numbersQuery)
 
   const addRecipe = (id, isVegan) => {
-    if (maxVegan && maxRandom) return console.error('The menu is already complete')
-    if (isVegan && maxVegan) return console.error('The vegan menu already has 2 recipes')
-    if (!isVegan && maxRandom) return console.error('The random menu already has 2 recipes')
+    if (maxVegan && maxRandom) return setStatus('alert1')
+    if (isVegan && maxVegan) return setStatus('alert2')
+    if (!isVegan && maxRandom) return setStatus('alert3')
 
     let recipeToAdd
     const filteredRecipes = recipes.filter(recipe => {
@@ -77,17 +73,18 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
   return (
     <header className='bg-cyan-400 flex items-center justify-center w-full relative'>
       <Search getQuery={setQuery} />
-      {status === 'rejected' && <AlertMessage />}
+      {status === 'rejected' && <AlertMessage msg={messagesError[status]} />}
       {
         (status === 'resolved' || query) &&
           <section className='w-full [height:52.8rem] pt-20 pb-32 lg:p-4 absolute top-full backdrop-blur-md overflow-y-auto'>
             <Button value='Close' specificStyles='px-6 py-2 absolute top-4 left-4' handleClick={closeSearch}/>
+            <Button value='More' specificStyles='px-6 py-2 absolute top-4 right-4' handleClick={handlePage} />
+            {/alert/.test(status) && <AlertMessage msg={messagesError[status]} />}
             {
               status === 'processing' && query
                 ? <Loader />
                 : <ListOfRecipes type={`Search: ${query}`} isSearch data={recipes} handleClick={addRecipe}/>
             }
-            <Button value='More' specificStyles='px-6 py-2 absolute top-4 right-4' handleClick={handlePage} />
           </section>
       }
     </header>
