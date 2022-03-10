@@ -13,8 +13,8 @@ const urlVegan = RECIPES_VEGAN_URL + import.meta.env.VITE_API_KEY
 const urlRandom = RECIPES_RANDOM_URL + import.meta.env.VITE_API_KEY
 
 const Home = () => {
-  const [recipesVegan, setRecipesVegan] = useState(mockVegan)
-  const [recipesRandom, setRecipesRandom] = useState(mockRandom)
+  const [recipesVegan, setRecipesVegan] = useState([])
+  const [recipesRandom, setRecipesRandom] = useState([])
   const { status, info } = useFetchHome([urlVegan, urlRandom])
 
   handleData(info, { vegan: setRecipesVegan, random: setRecipesRandom })
@@ -30,8 +30,8 @@ const Home = () => {
     setRecipesRandom(filterRecipes)
   }
 
+  if (status !== 'resolved') return <Loader />
   if (status === 'rejected') return <h1>Sorry! data not found</h1>
-  if (status === 'processing') return <Loader />
 
   return (
     <div className='bg-cyan-50 grid auto-rows-fr min-h-screen h-full w-full text-center overflow-hidden'>

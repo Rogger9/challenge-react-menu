@@ -10,11 +10,10 @@ const Loader = lazy(() => import('../Loader'))
 const RecipesDetail = () => {
   const { id } = useParams()
   const url = RECIPE_INFO(id) + import.meta.env.VITE_API_KEY
-
   const { status, info } = useFetchHome([url])
 
+  if (status !== 'resolved') return <Loader />
   if (status === 'rejected' || !info[0]) return <h1>Sorry! data not found</h1>
-  if (status === 'processing') return <Loader />
 
   const { data: recipe } = info[0]
   const { summary, nutrition, instructions } = recipe
