@@ -1,7 +1,7 @@
-import { lazy, useEffect, useState } from 'react'
+import { lazy, useState } from 'react'
 import Search from './Search'
-import axios from 'axios'
 import { useMessage } from '../hooks/useMessage'
+import { useFetchSearch } from '../hooks/useFetchSearch'
 
 const Loader = lazy(() => import('./Loader'))
 const ListOfRecipes = lazy(() => import('./Recipes/ListOfRecipes'))
@@ -12,10 +12,7 @@ const MAX_RECIPES = 2
 
 const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }) => {
   const [query, setQuery] = useState(null)
-  const [status, setStatus] = useState('idle')
   const [page, setPage] = useState(0)
-  const [search, setSearch] = useState([])
-  const { results: recipes, offset = 0 } = search
   const numbersQuery = 4
   const maxVegan = veganAmount === MAX_RECIPES
   const maxRandom = randomAmount === MAX_RECIPES
@@ -26,29 +23,21 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
     alert3: 'The random menu already has 2 recipes'
   }
 
-  useMessage({ status, setStatus })
-
   const URL_SEARCH = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=${numbersQuery}&offset=${page}&addRecipeInformation=true&apiKey=` + import.meta.env.VITE_API_KEY
 
-  useEffect(() => {
-    if (!query) return
-    setStatus('processing')
-    axios.get(URL_SEARCH)
-      .then(({ data }) => {
-        setSearch(data)
-        setStatus('resolved')
-      })
-      .catch(() => setStatus('rejected'))
-  }, [query, page])
+  const { status, setStatus, info, setInfo } = useFetchSearch({ url: URL_SEARCH, query, page })
+  const { results: recipes } = info
+
+  useMessage({ status, setStatus })
 
   const closeSearch = () => {
     setQuery(null)
     setPage(0)
-    setSearch([])
+    setInfo([])
     setStatus('idle')
   }
 
-  const handlePage = () => setPage(offset + numbersQuery)
+  const handlePage = () => setPage(page + numbersQuery)
 
   const addRecipe = (id, isVegan) => {
     if (maxVegan && maxRandom) return setStatus('alert1')
@@ -61,14 +50,16 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
       return !(recipe.id === id)
     })
 
-    isVegan
-      ? setRecipesVegan(({ results }) => ({ results: [...results, recipeToAdd] }))
-      : setRecipesRandom(({ recipes }) => ({ recipes: [...recipes, recipeToAdd] }))
+    const updateState = state => [...state, recipeToAdd]
 
-    return setSearch({ recipes: filteredRecipes })
+    isVegan
+      ? setRecipesVegan(updateState)
+      : setRecipesRandom(updateState)
+
+    return setInfo({ results: filteredRecipes })
   }
 
-  if (status === 'processing' && search.length === 0) return <section className='grid place-items-center'><Loader /></section>
+  if (status === 'processing' && !recipes) return <section className='grid place-items-center'><Loader /></section>
 
   return (
     <header className='bg-cyan-400 flex items-center justify-center w-full relative'>

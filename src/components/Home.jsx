@@ -1,60 +1,45 @@
 import { lazy, useState } from 'react'
-import { useFetch } from '../hooks/useFetch'
-import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
-import Header from './Header'
+import { mockRandom, mockVegan, RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
 import Loader from './Loader'
 import { getRecipesInformation } from '../utils/getRecipesInformation'
+import { handleData } from '../utils/handleData'
+import { useFetchHome } from '../hooks/useFetchHome'
 
+const Header = lazy(() => import('./Header'))
 const ListOfRecipes = lazy(() => import('./Recipes/ListOfRecipes'))
 const ExtraInformation = lazy(() => import('./ExtraInformation'))
 
+const urlVegan = RECIPES_VEGAN_URL + import.meta.env.VITE_API_KEY
+const urlRandom = RECIPES_RANDOM_URL + import.meta.env.VITE_API_KEY
+
 const Home = () => {
-  const [_recipesVegan, setRecipesVegan] = useState([])
-  const [_recipesRandom, setRecipesRandom] = useState([])
-  const { results: recipesVegan } = _recipesVegan
-  const { recipes: recipesRandom } = _recipesRandom
-  const getInfo = [
-    {
-      url: RECIPES_VEGAN_URL + import.meta.env.VITE_API_KEY,
-      method: setRecipesVegan
-    },
-    {
-      url: RECIPES_RANDOM_URL + import.meta.env.VITE_API_KEY,
-      method: setRecipesRandom
-    }
-  ]
+  const [recipesVegan, setRecipesVegan] = useState(mockVegan)
+  const [recipesRandom, setRecipesRandom] = useState(mockRandom)
+  const { status, info } = useFetchHome([urlVegan, urlRandom])
+
+  handleData(info, { vegan: setRecipesVegan, random: setRecipesRandom })
 
   const veganAmount = recipesVegan?.length
   const randomAmount = recipesRandom?.length
-  const searchInfo = {
-    veganAmount,
-    randomAmount,
-    setRecipesVegan,
-    setRecipesRandom
-  }
 
-  const { isLoading, error } = useFetch({ getInfo })
   const { dataResume } = getRecipesInformation({ recipesVegan, recipesRandom })
 
-  const deleteRecipeVegan = (id) => {
-    const filterRecipes = [...recipesVegan]?.filter(recipe => !(recipe.id === id))
-    setRecipesVegan({ results: filterRecipes })
-  }
-  const deleteRecipeRandom = (id) => {
-    const filterRecipes = [...recipesRandom]?.filter(recipe => !(recipe.id === id))
-    setRecipesRandom({ recipes: filterRecipes })
+  const deleteRecipe = (id, isVegan) => {
+    const filterRecipes = state => [...state].filter(recipe => !(recipe.id === id))
+    isVegan && setRecipesVegan(filterRecipes)
+    setRecipesRandom(filterRecipes)
   }
 
-  if (error) return <h1>Sorry! data not found</h1>
-  if (isLoading) return <Loader />
+  if (status === 'rejected') return <h1>Sorry! data not found</h1>
+  if (status === 'processing') return <Loader />
 
   return (
     <div className='bg-cyan-50 grid auto-rows-fr min-h-screen h-full w-full text-center overflow-hidden'>
-      <Header {...searchInfo} />
+      <Header {...{ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }} />
       <main className='row-span-6 grid lg:grid-cols-5'>
         <div className='col-span-4 grid place-items-center items-start lg:grid-cols-2 py-4 sm:px-2 gap-8 overflow-y-auto'>
-          <ListOfRecipes type='Random' data={recipesRandom} handleClick={deleteRecipeRandom} />
-          <ListOfRecipes type='Vegan' data={recipesVegan} handleClick={deleteRecipeVegan} />
+          <ListOfRecipes type='Random' data={recipesRandom} handleClick={deleteRecipe} />
+          <ListOfRecipes type='Vegan' data={recipesVegan} handleClick={deleteRecipe} />
         </div>
         <ExtraInformation data={dataResume} />
       </main>

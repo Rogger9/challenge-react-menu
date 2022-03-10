@@ -28,7 +28,7 @@ const RecipeCard = ({ id, title, image, handleClick, search = false, ...rest }) 
                 ? <Button value='Add' handleClick={() => handleClick(id, isVegan)} />
                 : <>
                   <Button value='Details' link={`/detail/${id}`} />
-                  <Button value='Delete' handleClick={() => handleClick(id)} />
+                  <Button value='Delete' handleClick={() => handleClick(id, isVegan)} />
                 </>
             }
           </section>

@@ -1,25 +1,23 @@
-import { useState } from 'react'
+import { lazy } from 'react'
 import { useParams } from 'react-router-dom'
 import { RECIPE_INFO } from '../../../config'
-import { useFetch } from '../../hooks/useFetch'
-import Button from '../Button'
-import Loader from '../Loader'
-import RecipeCard from './RecipesCard'
+import { useFetchHome } from '../../hooks/useFetchHome'
+
+const Button = lazy(() => import('../Button'))
+const RecipeCard = lazy(() => import('./RecipesCard'))
+const Loader = lazy(() => import('../Loader'))
 
 const RecipesDetail = () => {
-  const [recipe, setRecipe] = useState([])
   const { id } = useParams()
-  const getInfo = [
-    {
-      url: RECIPE_INFO(id) + import.meta.env.VITE_API_KEY,
-      method: setRecipe
-    }
-  ]
-  const { isLoading, error } = useFetch({ getInfo })
-  const { summary, nutrition, instructions } = recipe
+  const url = RECIPE_INFO(id) + import.meta.env.VITE_API_KEY
 
-  if (error) return <h1>Sorry! data not found</h1>
-  if (isLoading) return <Loader />
+  const { status, info } = useFetchHome([url])
+
+  if (status === 'rejected' || !info[0]) return <h1>Sorry! data not found</h1>
+  if (status === 'processing') return <Loader />
+
+  const { data: recipe } = info[0]
+  const { summary, nutrition, instructions } = recipe
 
   return (
     <div className='grid place-items-center min-h-screen h-full py-16 px-2 md:p-8 gap-8'>
