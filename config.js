@@ -6,42 +6,46 @@ export const RECIPE_INFO = (idRecipe) => `https://api.spoonacular.com/recipes/${
 
 export const LOGIN_URL = 'http://challenge-react.alkemy.org'
 
-export const smokVegan = {
-  results: [
-    {
-      id: 1,
-      pricePerServing: 2,
-      servings: 4,
-      readyInMinutes: 10,
-      healthScore: 1
-    },
-    {
-      id: 2,
-      pricePerServing: 4,
-      servings: 8,
-      readyInMinutes: 20,
-      healthScore: 2,
-      vegan: true
-    }
-  ]
-}
+export const mockVegan = [
+  {
+    id: 1,
+    pricePerServing: 2,
+    servings: 4,
+    readyInMinutes: 10,
+    healthScore: 1,
+    vegan: true
+  },
+  {
+    id: 2,
+    pricePerServing: 4,
+    servings: 8,
+    readyInMinutes: 20,
+    healthScore: 2,
+    vegan: true
+  }
+]
 
-export const smokRandom = {
-  recipes: [
-    {
-      id: 3,
-      pricePerServing: 6,
-      servings: 12,
-      readyInMinutes: 10,
-      healthScore: 3,
-      vegan: true
-    },
-    {
-      id: 4,
-      pricePerServing: 8,
-      servings: 16,
-      readyInMinutes: 20,
-      healthScore: 4
-    }
-  ]
-}
+export const mockRandom = [
+  {
+    id: 3,
+    pricePerServing: 6,
+    servings: 12,
+    readyInMinutes: 10,
+    healthScore: 3,
+    vegan: true
+  },
+  {
+    id: 4,
+    pricePerServing: 8,
+    servings: 16,
+    readyInMinutes: 20,
+    healthScore: 4
+  }
+]
+
+export const mockInfo = [
+  { data: { results: mockVegan } },
+  { data: { recipes: mockRandom } }
+]
+
+export const mockSearch = { results: mockRandom, numbers: 4, offset: 0 }
