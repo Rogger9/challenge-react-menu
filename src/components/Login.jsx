@@ -2,15 +2,26 @@ import { lazy, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { validationsLogin } from '../utils/validations'
-import axios from 'axios'
 import { LOGIN_URL } from '../../config'
 import { useMessage } from '../hooks/useMessage'
+import { api } from '../utils/api'
 
 const AlertMessage = lazy(() => import('../components/AlertMessage'))
 
-const Login = () => {
+const Login = ({ setAuth }) => {
   const [status, setStatus] = useState('idle')
   const messageError = 'We sorry! there was an error logging in. Try it again later'
+
+  const handleSubmit = ({ email, password }) => {
+    setStatus('processing')
+    api.post(LOGIN_URL, { email, password })
+      .then(({ data: { token } }) => {
+        window.localStorage.setItem('auth', token)
+        setAuth(token)
+        setStatus('resolved')
+      })
+      .catch(() => setStatus('rejected'))
+  }
 
   useMessage({ status, setStatus })
 
@@ -18,20 +29,9 @@ const Login = () => {
 
   return (
     <Formik
-      initialValues={{
-        email: '',
-        password: ''
-      }}
+      initialValues={{ email: '', password: '' }}
       validate={validationsLogin}
-      onSubmit={({ email, password }) => {
-        setStatus('processing')
-        axios.post(LOGIN_URL, { email, password })
-          .then(({ data: { token } }) => {
-            localStorage.setItem('auth', token)
-            setStatus('resolved')
-          })
-          .catch(() => setStatus('rejected'))
-      }}
+      onSubmit={handleSubmit}
     >
       {
         ({ errors: { email, password } }) => (
