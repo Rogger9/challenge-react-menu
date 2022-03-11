@@ -1,5 +1,5 @@
 import { lazy, useState } from 'react'
-import { mockRandom, mockVegan, RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
+import { RECIPES_RANDOM_URL, RECIPES_VEGAN_URL } from '../../config'
 import Loader from './Loader'
 import { getRecipesInformation } from '../utils/getRecipesInformation'
 import { handleData } from '../utils/handleData'

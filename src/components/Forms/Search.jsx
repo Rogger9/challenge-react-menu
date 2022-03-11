@@ -1,15 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { validationSearch } from '../utils/validations'
+import { validationSearch } from '../../utils/validations'
 
 const Search = ({ getQuery }) => (
   <Formik
-    initialValues={{
-      search: ''
-    }}
+    initialValues={{ search: '' }}
     validate={validationSearch}
-    onSubmit={({ search }) => {
-      getQuery(search)
-    }}
+    onSubmit={({ search }) => getQuery(search)}
   >
     {
       ({ errors }) => (

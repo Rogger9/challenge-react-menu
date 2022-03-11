@@ -1,16 +1,16 @@
 import { lazy, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { validationsLogin } from '../utils/validations'
-import { LOGIN_URL } from '../../config'
-import { useMessage } from '../hooks/useMessage'
-import { api } from '../utils/api'
+import { validationsLogin } from '../../utils/validations'
+import { LOGIN_URL } from '../../../config'
+import { useMessage } from '../../hooks/useMessage'
+import { api } from '../../utils/api'
+import { loginErrors } from '../../utils/messagesError'
 
-const AlertMessage = lazy(() => import('../components/AlertMessage'))
+const AlertMessage = lazy(() => import('../AlertMessage'))
 
 const Login = ({ setAuth }) => {
   const [status, setStatus] = useState('idle')
-  const messageError = 'We sorry! there was an error logging in. Try it again later'
 
   const handleSubmit = ({ email, password }) => {
     setStatus('processing')
@@ -60,7 +60,7 @@ const Login = ({ setAuth }) => {
               className='bg-cyan-200 py-1 px-4 border-2 border-cyan-300 rounded-md cursor-pointer hover:bg-cyan-300 outline-none disabled:opacity-40 disabled:pointer-events-none'
               aria-label='Send'
               disabled={status === 'processing'} />
-            {status === 'rejected' && <AlertMessage alert msg={messageError} />}
+            {status === 'rejected' && <AlertMessage alert msg={loginErrors[status]} />}
           </Form>
         )
       }

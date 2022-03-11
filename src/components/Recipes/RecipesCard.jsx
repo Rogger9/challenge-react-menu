@@ -17,7 +17,7 @@ const RecipeCard = ({ id, title, image, handleClick, search = false, ...rest }) 
       </Link>
       <ul className='grid grid-cols-2 justify-items-start gap-y-2 gap-x-6 text-sm'>
         {
-          detailsToShow.map(([name, value]) => (value || value !== 0) && <li key={name}>{name} <span className='text-orange-700'>{value}</span></li>)
+          detailsToShow.map(([name, value]) => (value && value !== 0) && <li key={name}>{name} <span className='text-orange-700'>{value}</span></li>)
         }
       </ul>
       {

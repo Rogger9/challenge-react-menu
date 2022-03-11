@@ -1,7 +1,9 @@
 import { lazy, useState } from 'react'
-import Search from './Search'
+import Search from './Forms/Search'
 import { useMessage } from '../hooks/useMessage'
 import { useFetchSearch } from '../hooks/useFetchSearch'
+import { URL_SEARCH } from '../../config'
+import { searchErrors } from '../utils/messagesError'
 
 const Loader = lazy(() => import('./Loader'))
 const ListOfRecipes = lazy(() => import('./Recipes/ListOfRecipes'))
@@ -16,16 +18,10 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
   const numbersQuery = 4
   const maxVegan = veganAmount === MAX_RECIPES
   const maxRandom = randomAmount === MAX_RECIPES
-  const messagesError = {
-    rejected: 'Sorry! Search failed. Please try again later',
-    alert1: 'The menu is already complete',
-    alert2: 'The vegan menu already has 2 recipes',
-    alert3: 'The random menu already has 2 recipes'
-  }
 
-  const URL_SEARCH = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=${numbersQuery}&offset=${page}&addRecipeInformation=true&apiKey=` + import.meta.env.VITE_API_KEY
+  const url = URL_SEARCH({ query, numbersQuery, page }) + import.meta.env.VITE_API_KEY
 
-  const { status, setStatus, info, setInfo } = useFetchSearch({ url: URL_SEARCH, query, page })
+  const { status, setStatus, info, setInfo } = useFetchSearch({ url, query, page })
   const { results: recipes } = info
 
   useMessage({ status, setStatus })
@@ -64,13 +60,13 @@ const Header = ({ veganAmount, randomAmount, setRecipesVegan, setRecipesRandom }
   return (
     <header className='bg-cyan-400 flex items-center justify-center w-full relative'>
       <Search getQuery={setQuery} />
-      {status === 'rejected' && <AlertMessage msg={messagesError[status]} />}
+      {status === 'rejected' && <AlertMessage msg={searchErrors[status]} />}
       {
         (status === 'resolved' || query) &&
           <section className='w-full [height:52.8rem] pt-20 pb-32 lg:p-4 absolute top-full backdrop-blur-md overflow-y-auto'>
             <Button value='Close' specificStyles='px-6 py-2 absolute top-4 left-4' handleClick={closeSearch}/>
             <Button value='More' specificStyles='px-6 py-2 absolute top-4 right-4' handleClick={handlePage} />
-            {/alert/.test(status) && <AlertMessage msg={messagesError[status]} />}
+            {/alert/.test(status) && <AlertMessage msg={searchErrors[status]} />}
             {
               status === 'processing' && query
                 ? <Loader />

@@ -5,20 +5,6 @@ export const getRecipesInformation = ({ recipesVegan = [], recipesRandom = [] })
     'Average Health Score': 0
   }
 
-  // const infoVegan = recipesVegan?.reduce((acc, el) => {
-  //   acc.price += el.pricePerServing * el.servings
-  //   acc.time += el.readyInMinutes
-  //   acc.health += el.healthScore
-  //   return acc
-  // }, { price: 0, time: 0, health: 0 })
-
-  // const infoRandom = recipesRandom?.reduce((acc, el) => {
-  //   acc.price += el.pricePerServing * el.servings
-  //   acc.time += el.readyInMinutes
-  //   acc.health += el.healthScore
-  //   return acc
-  // }, { price: 0, time: 0, health: 0 })
-
   const recipes = [...recipesVegan, ...recipesRandom]
 
   const infoRecipes = recipes?.reduce((acc, el) => {

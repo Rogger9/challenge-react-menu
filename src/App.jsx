@@ -5,7 +5,7 @@ import Loader from './components/Loader'
 
 const Home = lazy(() => import('./components/Home'))
 const RecipesDetail = lazy(() => import('./components/Recipes/RecipeDetail'))
-const Login = lazy(() => import('./components/Login'))
+const Login = lazy(() => import('./components/Forms/Login'))
 const PrivateRoute = lazy(() => import('./components/PrivateRoute'))
 const Page404 = lazy(() => import('./components/Page404'))
 
