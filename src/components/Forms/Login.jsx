@@ -2,9 +2,7 @@ import { lazy, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { validationsLogin } from '../../utils/validations'
-import { LOGIN_URL } from '../../../config'
 import { useMessage } from '../../hooks/useMessage'
-import { api } from '../../utils/api'
 import { loginErrors } from '../../utils/messagesError'
 
 const AlertMessage = lazy(() => import('../AlertMessage'))
@@ -12,20 +10,11 @@ const AlertMessage = lazy(() => import('../AlertMessage'))
 const Login = ({ setAuth }) => {
   const [status, setStatus] = useState('idle')
 
-  const handleSubmit = ({ email, password }) => {
-    setStatus('processing')
-    api.post(LOGIN_URL, { email, password })
-      .then(({ data: { token } }) => {
-        window.localStorage.setItem('auth', token)
-        setAuth(token)
-        setStatus('resolved')
-      })
-      .catch(() => setStatus('rejected'))
-  }
+  const handleSubmit = ({ email, password }) => setStatus('resolved')
 
   useMessage({ status, setStatus })
 
-  if (status === 'resolved') return <Navigate to='/' />
+  if (status === 'resolved') return <Navigate to='/recipes' />
 
   return (
     <Formik

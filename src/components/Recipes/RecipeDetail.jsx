@@ -20,7 +20,7 @@ const RecipesDetail = () => {
 
   return (
     <div className='grid place-items-center min-h-screen h-full py-16 px-2 md:p-8 gap-8'>
-      <Button value='Go Home' className='absolute ' specificStyles='absolute top-4 left-4' link='/' />
+      <Button value='Go Home' className='absolute ' specificStyles='absolute top-4 left-4' link='/recipes' />
       <RecipeCard {...recipe} />
       <p dangerouslySetInnerHTML={{ __html: summary }}></p>
       <section className='grid md:grid-cols-2 w-full gap-4'>
